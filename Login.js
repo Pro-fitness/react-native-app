@@ -15,6 +15,8 @@ import {
 } from 'react-native-elements';
 
 import Header from './header';
+import Signup from './Signup';
+
 
 import * as firebase from 'firebase';
 const firebaseConfig = {
@@ -27,45 +29,69 @@ const firebaseConfig = {
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 export default class Login extends Component {
+
+  static get defaultProps() {
+      return { component: Login };
+  }
+
   constructor(props){
     super(props);
-
     this.state = {
       loaded: true
     }
   }
 
-  login() {
-      var provider = new firebase.auth.FacebookAuthProvider();
-      firebaseApp.auth().signInWithPopup(provider).then(function(result) {
-          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-          var token = result.credential.accessToken;
-          // The signed-in user info.
-          var user = result.user;
-          console.log("LOLOLOLOL " + user);
-      }).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          var email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          var credential = error.credential;
-          console.log("LOLOLOLOL " + errorMessage);
+  login(){
+
+      this.setState({
+        loaded: false
       });
+
+      firebaseApp.auth().signInWithEmailAndPassword(this.state.email,this.state.password)
+      .catch(function(error) {
+          alert('Login Failed. Please try again' + error.message);
+      });
+
+      this.setState({
+          loaded: true
+      });
+
+      this.props.loginSuccess();
   }
+
+
 
   render(){
     return (
       <View style={styles.container}>
         <Header text="Login" loaded={this.state.loaded} />
         <View style={styles.body}>
+        <TextInput
+            style={styles.textinput}
+            onChangeText={(text) => this.setState({email: text})}
+            value={this.state.email}
+            placeholder={"Email Address"}
+          />
+          <TextInput
+            style={styles.textinput}
+            onChangeText={(text) => this.setState({password: text})}
+            value={this.state.password}
+            secureTextEntry={true}
+            placeholder={"Password"}
+          />
           <Button
               small
               buttonStyle={styles.button}
               backgroundColor="#4444ff"
-              icon={{name: 'facebook', type: 'font-awesome'}}
               onPress={() => this.login()}
-              title='Login with Facebook'
+              title='Login'
+          />
+          <Button
+              small
+              buttonStyle={styles.button}
+              backgroundColor="#4444ff"
+              onPress={() => this.props.onSignUp()}
+              title='Create a new account'
           />
         </View>
       </View>
@@ -96,7 +122,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-    flex: 1
+    flex: 1,
+    marginBottom: 20
   },
   hero: {
     padding: 20,

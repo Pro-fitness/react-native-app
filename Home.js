@@ -22,6 +22,10 @@ import {
 } from 'react-native';
 
 export default class Home extends Component {
+    
+    static get defaultProps() {
+        return { component: Home };
+    }
 
   constructor(props) {
     super(props);
