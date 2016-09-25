@@ -30,10 +30,6 @@ const firebaseApp = firebase.initializeApp(firebaseConfig, "temp");
 
 export default class Signup extends Component {
 
-  static get defaultProps() {
-      return { component: Signup };
-  }
-
   constructor(props){
     super(props);
 
@@ -73,8 +69,15 @@ export default class Signup extends Component {
         loaded: true
       });
 
-      this.props.onLogIn();
+      if (firebaseApp.auth().currentUser != null) {
+          alert("Sign up successful!");
+          this.props.navigator.push({id: "Home"});
+      }
 
+  }
+
+  goBack() {
+      this.props.navigator.pop();
   }
 
   render() {
@@ -107,7 +110,7 @@ export default class Signup extends Component {
               small
               buttonStyle={styles.button}
               backgroundColor="#4444ff"
-              onPress={() => this.props.onLogIn()}
+              onPress={() => this.goBack()}
               title='Already have an account?'
           />
         </View>

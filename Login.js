@@ -30,10 +30,6 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 export default class Login extends Component {
 
-  static get defaultProps() {
-      return { component: Login };
-  }
-
   constructor(props){
     super(props);
     this.state = {
@@ -42,7 +38,6 @@ export default class Login extends Component {
   }
 
   login(){
-
       this.setState({
         loaded: false
       });
@@ -56,10 +51,15 @@ export default class Login extends Component {
           loaded: true
       });
 
-      this.props.loginSuccess();
+      if (firebaseApp.auth().currentUser != null) {
+          alert("Login successful!");
+          this.props.navigator.push({id: "Home"});
+      }
   }
 
-
+  goToSignUpPage() {
+      this.props.navigator.push({id: "Signup"});
+  }
 
   render(){
     return (
@@ -90,7 +90,7 @@ export default class Login extends Component {
               small
               buttonStyle={styles.button}
               backgroundColor="#4444ff"
-              onPress={() => this.props.onSignUp()}
+              onPress={() => this.goToSignUpPage()}
               title='Create a new account'
           />
         </View>

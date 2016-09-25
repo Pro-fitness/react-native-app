@@ -22,10 +22,6 @@ import {
 } from 'react-native';
 
 export default class Home extends Component {
-    
-    static get defaultProps() {
-        return { component: Home };
-    }
 
   constructor(props) {
     super(props);
@@ -49,6 +45,7 @@ export default class Home extends Component {
   }
 
   render() {
+    console.log("HERE HERE");
     return (
       <ScrollView style={styles.container}>
         <View style={styles.hero}>
